@@ -1,0 +1,18 @@
+name: collect-insurance-news
+on:
+  schedule:
+    - cron: '0 * * * *'   # 매시 정각(UTC)
+  workflow_dispatch: {}    # 수동 실행 버튼
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Fetch & store news
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: node fetch-news.js
